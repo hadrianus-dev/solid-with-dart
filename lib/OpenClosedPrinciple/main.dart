@@ -1,68 +1,18 @@
-abstract class PaymentValidator {
-  bool validatePayment(Payment payment);
-}
-
-class AmountValidator implements PaymentValidator {
-  @override
-  bool validatePayment(Payment payment) {
-    if (payment.amount > 0) {
-      return true;
-    } else {
-      throw Exception('O valor do pagamento deve ser maior que zero.');
-    }
-  }
-}
-
-class CustomerNameValidator implements PaymentValidator {
-  @override
-  bool validatePayment(Payment payment) {
-    if (payment.customerName.isNotEmpty) {
-      return true;
-    } else {
-      throw Exception('O nome do cliente não pode estar vazio.');
-    }
-  }
-}
-
-class CreditCardValidator implements PaymentValidator {
-  @override
-  bool validatePayment(Payment payment) {
-    if (payment.creditCardNumber.length == 16) {
-      return true;
-    } else {
-      throw Exception('O número do cartão de crédito deve ter 16 dígitos.');
-    }
-  }
-}
-
-class Payment {
-  String paymentId;
-  double amount;
-  String customerName;
-  String creditCardNumber;
-  // ...
-
-  Payment(
-      this.paymentId, this.amount, this.customerName, this.creditCardNumber);
-}
-
-class PaymentProcessor {
-  void processPayment(Payment payment, List<PaymentValidator> validators) {
-    for (var validator in validators) {
-      if (!validator.validatePayment(payment)) {
-        // Lidar com o pagamento inválido
-        return;
-      }
-    }
-
-    // Lógica para processar o pagamento
-    print('is done');
-  }
-}
+import 'AmountValidator.dart';
+import 'CreditCardValidator.dart';
+import 'CustomerNameValidator.dart';
+import 'Payment.dart';
+import 'PaymentValidator.dart';
+import 'PaymentProcessor.dart';
 
 void main() {
   Payment payment = Payment('123456', 100.0, 'John Doe', '1234567890123456');
 
+  /// Creating a list of validators for a payment object. The validators are instances of classes that
+  /// implement the `PaymentValidator` interface, which defines a method to validate a payment object.
+  /// The `AmountValidator`, `CustomerNameValidator`, and `CreditCardValidator` classes are examples of
+  /// such validators. The list is then passed to a `PaymentProcessor` object to validate the payment
+  /// before processing it.
   List<PaymentValidator> validators = [
     AmountValidator(),
     CustomerNameValidator(),
